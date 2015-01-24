@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	private static final String REGEX = "<dl><dt><a href=\"(/[\\w]*?)\">(.*?)<b>";
+//	private static final String REGEX = "<dl><dt><a href=\"(/[\\w]*?)\">(.*?)<b>";
+	private static final String REGEX = "<dl>.*?</dl>";
 
 	public static String getTitle(String input){
 		StringBuffer buf = new StringBuffer();
@@ -14,11 +15,14 @@ public class Regex {
 		Matcher m = p.matcher(input);
 		
 		while(m.find()) {
+			buf.append(m.group());
+			/*
 			buf.append("<a href=\"https://torrentz.eu");
 			buf.append(m.group(1));
 			buf.append("\">");
 			buf.append(m.group(2));
 			buf.append("</a>");
+			*/
 		}
 		
 		return buf.toString();

@@ -7,24 +7,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.dsps.beans.SearchResultsBean;
-import com.dsps.metier.Content;
+import com.dsps.metier.Allocine;
+import com.dsps.metier.PageContent;
 
-public class SearchResultsServlet extends HttpServlet {
+public class SSearchResults extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1668801483934193771L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+ 
+		PageContent content = new PageContent("http://torrentz.eu/search?q=1080p");
+		content.getContent();
+		Allocine allocine = new Allocine();
 		
-		Content content = new Content();
-		SearchResultsBean sResults = new SearchResultsBean();
-		sResults.setMmItems(content.getUrlContent());
-		req.setAttribute("sResults",sResults);
+		req.setAttribute("allocine", allocine);
+		req.setAttribute("sResults",content);
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(req, resp);
 	}

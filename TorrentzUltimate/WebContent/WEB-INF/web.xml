@@ -5,7 +5,7 @@
   
  	<servlet>
 		<servlet-name>Test</servlet-name>
-		<servlet-class>com.dsps.servlets.SearchResultsServlet</servlet-class>
+		<servlet-class>com.dsps.servlets.SSearchResults</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
