@@ -1,3 +1,5 @@
+<%@page import="com.moviejukebox.allocine.model.MoviePerson"%>
+<%@page import="com.dsps.metier.TimeUtils"%>
 <%@page import="com.moviejukebox.allocine.model.MovieInfos"%>
 <%@page import="com.dsps.beans.BMediaItem"%>
 <%@page import="com.dsps.metier.PageContent"%>
@@ -9,7 +11,7 @@
 <!DOCTYPE html>
 <html>
 <title>Torrentz - Torrent Search Engine</title>
-<link rel="stylesheet" href="style.30.css" type="text/css" />
+<link rel="stylesheet" href="css/style.30.css" type="text/css" />
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <!--[if lt IE 9]>
@@ -838,11 +840,7 @@ $(document).ready(function() {$("#thesearchbox").autocomplete("/suggestions.php"
 	<jsp:useBean id="allocine" class="com.dsps.metier.Allocine" scope="request" />
 	<%
 		for (BMediaItem mediaItem : sResults.getMediaItems()) {
-	%>
-	<a href="<%=mediaItem.getLink()%>"> <H2><%=mediaItem.getTitle()%></H2></a>
-	
-	<br />
-	<%
+	if(!mediaItem.getType().contains("tv")){
 		MovieInfos movieInfos = allocine.getMovieInfos(mediaItem.getTitle());
 		if(movieInfos==null) continue;
 	%>
@@ -855,27 +853,58 @@ $(document).ready(function() {$("#thesearchbox").autocomplete("/suggestions.php"
 			%>
 	
 			<%-- <%="Histoire : " + movieInfos.getSynopsis()%> --%>
-			<td valign="top"><%="Résumé : " + movieInfos.getSynopsisShort()%>
+			<td valign="top">
+			<H2><a href="<%=mediaItem.getLink()%>" target="_blank"><%=mediaItem.getTitle()%></a>
+			<span class="s">
+				<%=mediaItem.getQuality()%>
+			</span>
+			<span class="s">
+				<%=mediaItem.getSize()%>
+			</span>
+			<span class="u">
+				<%="S :"+mediaItem.getSeeders() %>
+			</span>
+			<span class="d">
+				<%="L :"+mediaItem.getLeechers() %>
+			</span>
+			</H2>
+			
+			<%="<br>&nbsp;&nbsp;&nbsp;" + movieInfos.getSynopsisShort()%>
 			<br />
-			<br /><%="Presse : " + movieInfos.getPressRating()%>/100
+			<br /><%="<b>Presse : </b>" + movieInfos.getPressRating()%>/100
 		
-			<br /><%="Spectateur : " + movieInfos.getUserRating()%>/100
+			<br /><%="<b>Spectateur : </b>" + movieInfos.getUserRating()%>/100
 		
-			<br /><%="Durée : " + movieInfos.getRuntime()%>
-			<%-- <% Set<MoviePerson> acteurs = movieInfos.getActors();
+			<br /><%="<b>Durée : </b>" + movieInfos.getRuntime()/60 +" min" %>
+			<br><b>Acteurs : </b><p> &nbsp;&nbsp;&nbsp;
+			<% int loop = 0;
+			for(MoviePerson actor : movieInfos.getActors()){ 
+			%>
+				<%=actor.getName().trim()%>
 				
-			%> --%>
-			<br /><%-- <%="Acteurs : " + movieInfos.getActors()%> --%>
-		
-			<br /><%="Réalisateurs : " + movieInfos.getDirectors()%>
-			<br /><%="Date de sortie : " + movieInfos.getReleaseDate()%>
-			<br /><%="release state : " + movieInfos.getReleaseState()%>
-			<br /><%="Code Allociné : " + movieInfos.getCode()%>
-			<br /><%="response status code : "+ movieInfos.getResponseStatusCode()%>
-			<br /><%="distributeur : " + movieInfos.getDistributor()%>
+			<% 
+				if(++loop<10){
+			%>
+					<%=","%>
+			<%} else{ %>
+					<%="."%>
+				<%
+				break;
+			}
+			}%>
+			</p>
+			<br /><%="<b>Réalisateurs : </b>" + movieInfos.getDirectors()%>
+			<br /><%="<b>Date de sortie : </b>" + TimeUtils.reverseDate(movieInfos.getReleaseDate())%>
+			<br />
+			<a href='http://www.allocine.fr/film/fichefilm_gen_cfilm=<%= movieInfos.getCode() %>.html' target="_blank">
+				<img alt="" src="resources/img/allocine_logo.jpg" width="100" height="50"/>
+			</a>
 			</td>
 		</tr>
 	</table>
-	<% } %>
+	<% }
+	}%>
+	<p>&nbsp;</p>
+	<br>
 </body>
 </html>

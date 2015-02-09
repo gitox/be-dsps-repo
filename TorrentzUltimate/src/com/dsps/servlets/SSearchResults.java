@@ -20,9 +20,8 @@ public class SSearchResults extends HttpServlet {
  
 		PageContent content = new PageContent("http://torrentz.eu/search?q=1080p");
 		content.getContent();
-		Allocine allocine = new Allocine();
-		
-		req.setAttribute("allocine", allocine);
+				
+		req.setAttribute("allocine", new Allocine());
 		req.setAttribute("sResults",content);
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(req, resp);
